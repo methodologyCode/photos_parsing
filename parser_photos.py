@@ -29,7 +29,7 @@ async def get_html(url, user_agent):
     return BeautifulSoup(response_text, "lxml")
 
 
-async def get_list_links_actress(soup):
+def get_list_links_actress(soup):
     article_list = soup.find("div", {"id": "content"}).find_all("article")
     links = []
 
@@ -43,7 +43,7 @@ async def get_list_links_actress(soup):
     return links
 
 
-async def get_list_links_photos(soup):
+def get_list_links_photos(soup):
     entry_content = soup.find("div", {"class": "entry-content"})
     a_list = entry_content.find_all("a")
     name = (
@@ -68,8 +68,9 @@ async def get_list_links_photos(soup):
 
 async def download_images(link, user_agent):
     html = await get_html(link, user_agent)
-    name, links = await get_list_links_photos(html)
-    await download_img(name, links, user_agent=user_agent)
+    name, links = get_list_links_photos(html)
+    result = await download_img(name, links, user_agent=user_agent)
+    print(result)
 
 
 async def download_img(name, imgs, user_agent=None):
@@ -92,6 +93,7 @@ async def download_img(name, imgs, user_agent=None):
                         if not chunk:
                             break
                         f.write(chunk)
+    return f"Фото {name} скачаны"
 
 
 async def main():
@@ -102,7 +104,7 @@ async def main():
     }
     url = "https://thefappeningblog.com/tag/leaked-celebs/"
     html = await get_html(url, user_agent=user_agent)
-    links = await get_list_links_actress(html)
+    links = get_list_links_actress(html)
 
     coroutines = []
     for link in links[:AMOUNT_OF_ACTRESS]:
