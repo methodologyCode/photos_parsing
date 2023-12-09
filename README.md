@@ -9,5 +9,5 @@
 ```
 
 ```
-Python 3.7, iohttp, BeautifulSoup, Logging.
+Python 3.7, aiohttp, BeautifulSoup, Logging.
 ```
