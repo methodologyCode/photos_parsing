@@ -103,7 +103,7 @@ async def main():
         "Chrome/102.0.0.0 Safari/537.36"
     }
     url = "https://thefappeningblog.com/tag/leaked-celebs/"
-    html = await get_html(url, user_agent=user_agent)
+    html = await asyncio.create_task(get_html(url, user_agent=user_agent))
     links = get_list_links_actress(html)
 
     coroutines = []
